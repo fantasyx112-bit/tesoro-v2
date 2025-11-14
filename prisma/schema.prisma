@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  discordId String?  @unique
+  name      String?
+  email     String?  @unique
+  role      String   @default("user")
+  createdAt DateTime @default(now())
+}
+
+model Producto {
+  id              Int      @id @default(autoincrement())
+  nombre          String
+  sku             String?  @unique
+  cantidad_actual Int      @default(0)
+  precio_unitario Float?
+  ubicacion       String?
+  atributos_extra Json?
+  createdAt       DateTime @default(now())
+}
+
+model ColumnaPersonalizada {
+  id        Int      @id @default(autoincrement())
+  nombre    String
+  tipo      String
+  aplicaEn  String
+  opciones  Json?
+  createdAt DateTime @default(now())
+}
+
+model Peticion {
+  id                 Int      @id @default(autoincrement())
+  userId             Int
+  productoId         Int
+  cantidadSolicitada Int
+  precioUnitario     Float?
+  total              Float?
+  ubicacion          String?
+  estado             String   @default("pendiente")
+  atributos          Json?
+  createdAt          DateTime @default(now())
+  user     User     @relation(fields: [userId], references: [id])
+  producto Producto @relation(fields: [productoId], references: [id])
+}
+
+model Reabastecimiento {
+  id               Int      @id @default(autoincrement())
+  peticionId       Int
+  encargadoId      Int?
+  ubicacionDestino String?
+  estado           String   @default("pendiente")
+  fechaCompletado  DateTime?
+  createdAt        DateTime @default(now())
+  peticion Peticion @relation(fields: [peticionId], references: [id])
+}
+
+model Movimiento {
+  id           Int      @id @default(autoincrement())
+  tipo         String
+  referenciaId Int?
+  userId       Int?
+  timestamp    DateTime @default(now())
+  detalles     Json?
+}

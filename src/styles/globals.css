@@ -1,0 +1,12 @@
+/* Dark theme basic */
+:root {
+  --bg: #0b1220;
+  --panel: #0f1a2b;
+  --text: #e6eef8;
+  --muted: #9fb0c8;
+  --accent: #3fb0ff;
+}
+body { margin:0; font-family: Inter, Arial, sans-serif; background: var(--bg); color: var(--text); }
+a { color: var(--accent); }
+table { background: var(--panel); }
+input, button { padding:6px 8px; border-radius:6px; border:1px solid #233; background:#071224; color:var(--text); }
