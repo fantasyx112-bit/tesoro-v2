@@ -15,6 +15,25 @@ export default function AdminUsers() {
     setUsers(data)
     setLoading(false)
   }
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { supabase } from "../../src/lib/supabase";
+
+export default function AdminPage() {
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) router.replace("/login");
+      else setLoading(false);
+    });
+  }, []);
+
+  if (loading) return <p>Cargando...</p>;
+
+  return <div>Panel Admin</div>;
+}
 
   async function changeRole(id: number, role: string) {
     await fetch('/api/admin/users', {
